@@ -1,0 +1,191 @@
+/* various colors */
+:root {
+  --color-grey-light-1: #eae9e9;
+  --color-grey-light-2: #bab9b9;
+  --color-grey-light-3: #9a9796;
+  --color-grey-light-4: #7a7979;
+
+  --color-grey-dark-1: #242629;
+  --color-grey-dark-2: #646669;
+  --color-grey-dark-3: #848689;
+
+  --color-dark-1: #04070f;
+  --color-dark-2: #0f2140;
+  --color-dark-3: #213962;
+
+  --shadow-dark: 0 2rem 6rem rgba(0, 0, 0, 0.8);
+  --shadow-light: 0 2rem 4rem rgba(0, 0, 0, 0.4);
+  
+  --color-primary: #61c5d9;
+  --color-primary-light: #e1f551;
+  --color-primary-light-2: #61c5d940;
+  --color-primary-dark: #1185a9;
+  --color-primary-dark-2: #a92311;
+
+  --color-primary-text: var(--color-dark-3);
+}
+
+body {
+  background-color: var(--color-primary-dark);
+  color: var(--color-primary-light);
+}
+
+.navbar-dark {
+  background-color: var(--color-primary) !important;
+  color: var(--color-dark-1) !important;
+}
+.navbar-dark button:hover:not(.btn) {
+  background-color: var(--color-primary-dark) !important;
+  color: var(--color-dark-1) !important;
+}
+.nav-link:not(.btn) {
+  color: var(--color-primary-light) !important;
+}
+
+.divider {
+  border-color: var(--color-primary-light) !important;
+  height: 1px;
+  width: 30vw;
+  font-size: 0;
+}
+.header,
+.footer {
+  background-color: var(--color-primary) !important;
+}
+.footer {
+  position:static;
+}
+.header a,
+.footer a {
+  color: var(--color-primary-light);
+  transition: all 0.8s;
+}
+.header a:hover,
+.footer a:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px) translateX(1px) skew(1deg);
+  color: var(--color-primary-light);
+  box-shadow: var(--shadow-dark);
+}
+.help {
+  background-color: var(--color-primary-dark);
+  color: var(--color-primary-light);
+}
+.header .help > li > a:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+/* reduce footer size */
+.footer li > a {
+  font-size: 80%;
+  line-height: 0.9;
+}
+
+/*container for bootstrap alert messages - make height 0 as per interfernce with other elements*/
+.messages {
+  height: 0;
+  width: 100%;   
+  position: fixed;
+  left: 0;
+  bottom: 3.5rem;
+}
+
+
+
+/* error page */
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}
+.error__box {
+  width: 90%;
+  height: 80%;
+  padding: 1rem;
+  border: solid 2px var(--bs-danger); /* using bootstrap css variable*/
+}
+.error__title {
+  padding: 1rem;
+}
+.error__msg {
+  font-size: 1.5rem;
+  padding: 1rem;
+}
+
+/* supplement bootstrap flex grow */
+.flex-grow-2 {
+  flex-grow: 2;
+}
+.flex-grow-3 {
+  flex-grow: 3;
+}
+.flex-grow-4 {
+  flex-grow: 4;
+}
+.flex-grow-5 {
+  flex-grow: 5;
+}
+
+
+
+/*dartboard styling*/
+.dartboard {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10rem;
+  background-color: var(--color-primary);
+  color: var(--color-primary-dark);
+  min-height: 80vh;
+}
+
+.dartboard-content {
+  position: relative;
+  width: 70vh;
+  height: 70vh;
+  border: 2px solid black;
+  transition: all 1s;
+}
+
+.dartboard-img {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.mark {
+  background-color: transparent;
+  background-image: url('/images/dartboard/dart1.png');
+  position: absolute;
+  width: 5rem;
+  height: 5rem;
+  transform: translate(0, -100%);
+}
+
+/*no longer needed as calc in JS uses bubbled click*/ 
+/* .dartboard-content:hover .mark {
+  background-color: orangered;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset 0 0 0 2px green, inset 0 0 0 4px white;
+} */
+
+.dartboard-list {
+  width: 20vw;
+  height: 60vh;
+  border: 2px solid black;
+  background: white;
+  overflow-y: scroll;
+}
+
+.dartboard-list-item {
+  color: black;
+  margin-left: 2rem;
+  font-size: 2rem;
+}
