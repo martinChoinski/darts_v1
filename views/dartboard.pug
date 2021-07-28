@@ -2,9 +2,15 @@ extends base
 
 block content
     .dartboard
-        .dartboard-content
-            img.dartboard-img(src='/images/dartboard/dartboard.png')
+        .dartboard-content(draggable='false')
+            img.dartboard-img(draggable='false' src='/images/dartboard/dartboard.svg')
         .d-flex.flex-column 
             button.btn.btn-warning.dartboard-clear-btn.m-5.mb-2
                 h4 Clear Dartboard
             ol.dartboard-list.ms-5 
+    .messages
+        if alerts
+            each alert in alerts
+                .alert.alert-dismissible.fade.show(class=`alert-${alert.type}` role='alert' style='z-index:1080')
+                    span= alert.msg
+                    button.btn-close(type='button' data-bs-dismiss='alert' aria-label='Close')

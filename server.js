@@ -1,6 +1,9 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: './config.env' });
+// dotenv.config({ path: './.env.development' });
+dotenv.config();
 const dartController = require('./controllers/dartController');
+const port = process.env.PORT || '3000';
+const host = process.env.HOST || '127.0.0.1';
 
 const { log } = require('./logger');
 const util = require('util');
@@ -14,7 +17,12 @@ const server = http.createServer(app);
 /// Socket Io stuff - share express http server
 log.info(`socket io --start`);
 const { Server } = require("socket.io");
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: `http://${process.env.HOST}:${process.env.PORT}`,
+    methods: ["GET", "POST"]
+  }
+});
 
 //save to locals
 app.locals.io = io;
@@ -36,8 +44,6 @@ io.engine.on("connection_error", (err) => {
 });
 
 //http server for socket io + express
-const port = process.env.PORT || '3000';
-const host = process.env.HOST || '127.0.0.1';
 server.listen(port, host, () => {
   const msg = `hmm [express, socket io] listening ${host}:${port}...`;
   console.log(msg);

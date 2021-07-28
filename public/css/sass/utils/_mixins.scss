@@ -1,0 +1,19 @@
+@mixin player_outline($color) {
+    box-shadow : inset 0rem 0rem 8rem #{$color};
+    border : 1rem solid #{$color};
+    transition: all 10s;
+ 
+    &:hover {
+        box-shadow : inset 0rem 0rem 1px #{$color};
+    }
+}
+
+@mixin player_colors {
+    @for $i from 1 through 6 {
+        .games__session-player {
+            &-#{$i} {
+                @include player_outline("var(--color-player-#{$i})")
+            }
+        }
+    }
+}

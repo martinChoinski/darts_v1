@@ -1,0 +1,50 @@
+@use '../utils/variables' as *;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+    // font-size: 62.5%;
+}
+
+body {
+    font-family: "Bogart", 'Times New Roman', serif;
+    // font-weight: 400;
+    // line-height: 1.6;
+    background-image: url('./../../images/games/background.png');
+    background-size: cover;
+    background-position: 0rem -12rem;
+    background-repeat: no-repeat;
+    color: var(--color-primary-light);
+    // min-height: 100vh;
+}
+
+.shield {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 110vw;
+    height: 110vh; 
+    overflow: hidden;
+    position:fixed;
+    top: 0;
+    left: 0;
+    background: transparent;
+    z-index: 5000;
+    
+    .btn {
+        width: 10rem;
+        height: 2rem;
+        color: #def;
+        background-color: #123;
+    }
+}

@@ -1,4 +1,7 @@
 import { showAlert, removeAlerts } from './alert';
+const { v4: uuidv4 } = require('uuid');
+
+//console.log(uuidv4());
 
 //store current darts
 const darts = [];
@@ -21,10 +24,11 @@ window.addEventListener('load', e => {
 
 
 //socket io for page refreshes after receiving and processing darts ... etc
-const socket = io('http://localhost:8000');
+const socket = io(`http://${process.env.HOST}:${process.env.PORT}`);
 socket.on("connect", () => {
     console.log(`socket connection id = [${socket.id}]`);
     socket.emit("client message", "Hello i am client and connected with you");
+    showAlert('info','hello i am alert');
 });
 
 
@@ -56,26 +60,28 @@ const formatDart = (x, y, w, h, ts) => {
     return rec;
 }
 
-const showDart = (x, y, w, h, i) => {
+const showDart = (x, y, w, h, id) => {
     const parent = document.querySelector('.dartboard-content');
     const h_ratio = parent.offsetHeight / h;
     const w_ratio = parent.offsetWidth / w;
     const mark = document.createElement("div");
     mark.classList.add('mark');
-    mark.inert=true;
     mark.style.left = Math.floor(x * w_ratio) + 'px';
     mark.style.top = Math.floor(y * h_ratio) + 'px';
-    mark.dataset.index = i;
+    mark.dataset.id = id;
+
     // mark.style.backgroundImage=`url('/images/dartboard/dart${Math.floor(Math.random()*4)+1}.png')`;
     parent.appendChild(mark);
 
     const x1 = (x-w/2)*451/w;
     const y1 = (-y+h/2)*451/h;
-    // console.log(`pixel x[${x-w/2}]; y[${-y+h/2}];; w[${w}]; ; h[${h}];`)
-    // console.log(`mm x[${Math.round(x1*10**2)/10**2}]; y[${Math.round(y1*10**2)/10**2}];; w [${451}]; ; h[${451}];`)
+    console.log(`x mm[${x1}], y mm[${y1}], x px[${x}], y px[${y}]`);
+
+    const d = Math.sqrt(x1**2 + y1**2); //use calc mm for 451 mm board
+    const dp = Math.sqrt(x**2 + y**2); //use pixels from web page instead of camera
+    console.log(`x d mm[${d}], y d px[${dp}]`);
 
     const dart = to_values(x1, y1);
-    // console.log(`dartboard value[${dart[0]}]; mult[${dart[1]}]`);
 
     const list = document.querySelector('.dartboard-list');
     const item = document.createElement("li");
@@ -83,26 +89,27 @@ const showDart = (x, y, w, h, i) => {
     const mult_desc = ['miss','single','double', 'triple'];
     item.style.color = ['red','black','blue','green'][dart[1]];
     item.textContent = `${mult_desc[dart[1]]} ${dart[0]}`;
-    item.dataset.index = i;
+    item.dataset.id = id;
     list.appendChild(item);
 }
 
-// const dartboard = document.querySelector('.dartboard-img');
+// add a dart
 const dartboard = document.querySelector('.dartboard-content');
 if(dartboard) {
     console.log(`adding handler for dartboard image click ... `);
     dartboard.addEventListener('click', e => {
         //display new dart
+        const id = uuidv4();
         const xAdj = e.target.offsetLeft != 0 ? e.target.offsetLeft : 0;
         const yAdj = e.target.offsetTop != 0 ? e.target.offsetTop - e.target.offsetHeight : 0;
         const x = e.offsetX + xAdj;
         const y = e.offsetY + yAdj;
         const h = e.currentTarget.offsetHeight;  //bubble to container
         const w = e.currentTarget.offsetWidth;
-        showDart(x,y,w,h, darts.length);
+        showDart(x, y, w, h, id);
 
         //store new dart with web worker
-        darts.push({x,y,w,h,ts:Number(new Date())});
+        darts.push({x, y, w, h, id, ts:Number(new Date())});
         let stored_nuts = localStorage.getItem("stored_nuts");
         stored_nuts = JSON.stringify(darts);
         localStorage.setItem(`stored_nuts`, stored_nuts);
@@ -117,25 +124,26 @@ if(dartboard) {
 
 const removeDart = item => {
 
-    const index = item.dataset.index;
-    console.log(`removeDart -- item[${index}]`);
+    const id = item.dataset.id;
+    console.log(`removeDart -- item[${id}]`);
      
     const marks = Array.from(document.querySelectorAll('.mark'));
-    const mark = marks.find(el => el.dataset.index == index);
-    console.log(`removeDart -- item[${index}] mark[${mark.dataset.index}]`);
+    const mark = marks.find(el => el.dataset.id === id);
+    console.log(`removeDart -- item[${id}] mark[${mark.dataset.id}]`);
     if(!mark) {
-        console.log(`removeDart -- item[${index}] not found`);
+        console.log(`removeDart -- item[${id}] not found`);
         return;
     }
 
     //remove visuals
-    console.log(`removeDart -- item[${index}] visual elements removed`);
+    console.log(`removeDart -- item[${id}] visual elements removed`);
     mark.remove();
     item.remove();
 
     //remove from array and local storage
-    console.log(`removeDart -- item[${index}] removed from storage`);
-    darts.splice(index, 1);
+    console.log(`removeDart -- item[${id}] removed from storage`);
+    const ix = darts.findIndex(el => el.id === id);
+    darts.splice(ix, 1);
     const stored_nuts = JSON.stringify(darts);
     localStorage.setItem(`stored_nuts`, stored_nuts);
 
@@ -184,12 +192,11 @@ const showDarts = () => {
     clearDartBoard();
 
     stored_nuts = JSON.parse(stored_nuts);
-    let i = 0;
     for(let nut of stored_nuts) {
         darts.push(nut);
-        showDart(nut.x, nut.y, nut.w, nut.h, i);
-        i++;
-    } 
+        showDart(nut.x, nut.y, nut.w, nut.h, nut.id);
+    }
+    console.log(`# nuts[${stored_nuts.length}]; # darts[${darts.length}]`); 
 }
 
 //when the window loads or changes reload dart visuals...
@@ -226,8 +233,8 @@ const to_values = (x, y) => {
     //from center radius in mm
     const inner_bull = [0, 12.7 / 2];
     const outer_bull = [12.7 / 2, 31.8 / 2];
-    const double = [162, 170];
     const treble = [99, 107];
+    const double = [162, 170];
 
     //single = center to inner treble or from outer treble to inner double
     const radius = Math.sqrt(x*x + y*y);

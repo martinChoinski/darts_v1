@@ -1,0 +1,38 @@
+//avatars - subect to change
+.modal {
+    &#player_avatar {
+        & .modal-dialog{
+            border: 1px solid white;
+            max-width: unset !important;
+        }
+        
+        & .modal-content{
+            color: white;
+            background-color: transparent !important;
+            margin: 0 auto;
+        }
+        
+        & .modal-header {
+            display: flex;
+            justify-content: center;
+            border: 1px solid white;
+
+            & .btn-close {
+                position: absolute;
+                right: 1.5rem;
+                top: 1rem;
+            }  
+            
+        }
+
+        & .modal-body {
+            .games__session-avatars {
+                display: grid;
+                grid-template-columns: repeat(auto-fill,minmax(200px, 1fr));
+            }
+        }                            
+    }
+}
+
+  
+  

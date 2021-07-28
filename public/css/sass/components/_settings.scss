@@ -1,0 +1,55 @@
+//menu settings button
+.settings {
+    width: 4rem;
+    height: 4rem;
+    margin-right: 1rem;
+    text-decoration: none;
+  
+    .bi-list {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        border: 1px solid var(--color-dark-3);
+        background-color: transparent;
+        box-shadow: var(--shadow-light);
+        color: var(--color-primary-light);
+        transition: all 1s;
+          
+        &:hover {
+            width: 3.2rem;
+            height: 3.2rem;
+            background-color: var(--color-primary);
+            box-shadow: var(--shadow-light);
+            transform: translateY(-1px) translateX(1px);
+        }
+    }
+
+    &__menu {
+        border: 1px solid var(--color-dark-3);
+        background-color: transparent;
+        color: var(--color-primary-light);
+      
+        & > li > a {
+            background-color: transparent;
+            color: var(--color-primary-light-2);
+
+            &:active, 
+            &:hover {
+                background-color: var(--color-primary-light);
+                color: var(--color-primary-dark);
+            }
+        }
+    }
+}
+
+// override some bootstrap
+.btn {
+    &:not(.disabled) {
+        transition: all 2s;
+        
+        &:hover {
+            box-shadow: var(--shadow-dark) !important;
+            transform: translateY(-1px) translateX(1px);
+        }
+    }
+}

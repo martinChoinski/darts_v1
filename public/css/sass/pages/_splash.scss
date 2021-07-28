@@ -1,0 +1,73 @@
+@use "../utils/variables" as *;
+
+/*splash screen as per screenshot from la di darts*/
+.splash__screen {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-title {
+    width: 15rem;
+
+    & h1 {
+      color: var(--color-ladi-splash);
+      font-size: 5rem;
+      line-height: 3rem;
+    }
+
+    &--1 {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 1.5rem;
+    }
+        
+    &--2 > * {
+      display: flex;
+      align-items: flex-end;
+      letter-spacing: 4px;
+    }
+  }
+
+  &--ostrich {
+    &-container {
+      width: 4rem;
+    }
+
+    &-img {
+      object-fit: scale-down;
+      width: 4rem;
+      filter: contrast(0) sepia(100%) hue-rotate(10deg) saturate(2000%) brightness(100%); 
+      margin-left: -4px;
+    }
+  }
+
+  &-btn {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    
+    &-text {
+      margin-top: .5rem;
+      font-size: 1rem;
+      padding: 4px .5rem 2px 1rem;
+      color: #eee;
+      background: linear-gradient(to right, #ff8415, #ffcd0c);
+      border-radius: 4px;
+    }
+  
+  }
+
+  .splash__screen-btn:hover {
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  &-play {
+    margin-left: .8rem;
+    & > * {
+      color: #ff512b;
+    }
+  }
+}
